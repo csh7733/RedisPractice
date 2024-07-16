@@ -1,13 +1,16 @@
 package com.example.redis.practice.service;
 
+import com.example.redis.practice.dto.ResponseLeaderboardDto;
 import com.example.redis.practice.repository.RedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -53,5 +56,16 @@ public class RedisService {
 
     public Set<Object> getZSet(String key, double min, double max) {
         return redisRepository.getZSet(key, min, max);
+    }
+
+    public void saveScore(String key, String value, double score) {
+        redisRepository.saveZSet(key, value, score);
+    }
+
+    public List<ResponseLeaderboardDto> getTopScores(String key, int top) {
+        Set<ZSetOperations.TypedTuple<Object>> topScores = redisRepository.getTopScores(key, top);
+        return topScores.stream()
+                .map(ResponseLeaderboardDto::new)
+                .collect(Collectors.toList());
     }
 }

@@ -3,6 +3,7 @@ package com.example.redis.practice.repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -55,5 +56,9 @@ public class RedisRepository {
 
     public Set<Object> getZSet(String key, Double min, Double max) {
         return redisTemplate.opsForZSet().rangeByScore(key, min, max);
+    }
+
+    public Set<ZSetOperations.TypedTuple<Object>> getTopScores(String key, int top) {
+        return redisTemplate.opsForZSet().reverseRangeWithScores(key, 0, top - 1);
     }
 }

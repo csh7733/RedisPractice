@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class RequestStringDto {
-    String key;
-    String value;
+    private String key;
+    private String value;
 }
