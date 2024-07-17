@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Like Post</title>
+    <script>
+        async function likePost() {
+            const member = document.getElementById("member").value;
+            const postId = document.getElementById("postId").value;
+
+            const response = await fetch(`/api/likes/like?postId=${postId}&member=${member}`, {
+                method: 'POST'
+            });
+
+            const message = await response.text();
+            document.getElementById("message").innerText = message;
+            loadTopPosts();
+        }
+
+        async function unlikePost() {
+            const member = document.getElementById("member").value;
+            const postId = document.getElementById("postId").value;
+
+            const response = await fetch(`/api/likes/unlike?postId=${postId}&member=${member}`, {
+                method: 'POST'
+            });
+
+            const message = await response.text();
+            document.getElementById("message").innerText = message;
+            loadTopPosts();
+        }
+
+        async function getLikes() {
+            const postId = document.getElementById("postId").value;
+
+            const response = await fetch(`/api/likes/${postId}`);
+            const data = await response.json();
+
+            document.getElementById("likes").innerText = `Likes: ${data.likeCount}, Members: ${data.members.join(', ')}`;
+            loadTopPosts();
+        }
+        async function loadTopPosts() {
+            try {
+                const response = await fetch('api/likes/top?top=5');
+                const topPosts = await response.json();
+                const tbody = document.getElementById('topPostsTable').getElementsByTagName('tbody')[0];
+                tbody.innerHTML = '';
+                topPosts.forEach(post => {
+                    const row = tbody.insertRow();
+                    const cellPostId = row.insertCell(0);
+                    const cellLikeCount = row.insertCell(1);
+                    cellPostId.textContent = post.postId;
+                    cellLikeCount.textContent = post.score;
+                });
+            } catch (error) {
+                console.error('Error loading top posts:', error);
+            }
+        }
+
+        window.onload = loadTopPosts;
+    </script>
+</head>
+<body>
+<h1>Like Post</h1>
+<input type="text" id="member" placeholder="Member name"><br>
+<input type="text" id="postId" placeholder="Post ID"><br>
+<button onclick="likePost()">Like</button>
+<button onclick="unlikePost()">Unlike</button>
+<button onclick="getLikes()">Get Likes</button>
+<p id="message"></p>
+<p id="likes"></p>
+
+<h1>Top 5 Liked Posts</h1>
+<table id="topPostsTable" border="1">
+    <thead>
+    <tr>
+        <th>Post ID</th>
+        <th>Like Count</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+</body>
+</html>
