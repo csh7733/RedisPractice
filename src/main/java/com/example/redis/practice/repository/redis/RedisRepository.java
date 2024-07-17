@@ -1,4 +1,4 @@
-package com.example.redis.practice.repository;
+package com.example.redis.practice.repository.redis;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
