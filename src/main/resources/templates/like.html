@@ -14,7 +14,7 @@
 
             const message = await response.text();
             document.getElementById("message").innerText = message;
-            loadTopPosts();
+            getLikes();
         }
 
         async function unlikePost() {
@@ -27,7 +27,7 @@
 
             const message = await response.text();
             document.getElementById("message").innerText = message;
-            loadTopPosts();
+            getLikes();
         }
 
         async function getLikes() {
@@ -39,6 +39,7 @@
             document.getElementById("likes").innerText = `Likes: ${data.likeCount}, Members: ${data.members.join(', ')}`;
             loadTopPosts();
         }
+
         async function loadTopPosts() {
             try {
                 const response = await fetch('api/likes/top?top=5');
@@ -57,11 +58,60 @@
             }
         }
 
-        window.onload = loadTopPosts;
+        async function loadNotices() {
+            try {
+                const response = await fetch('/api/notice');
+                const notices = await response.json();
+                const noticeList = document.getElementById('noticeList');
+                noticeList.innerHTML = ''; // 기존 내용을 초기화
+                notices.forEach(notice => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `ID: ${notice.id}, Title: ${notice.title}`;
+                    noticeList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Error loading notices:', error);
+            }
+        }
+
+        async function login() {
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            const requestBody = {
+                username: username,
+                email: email,
+                password: password
+            };
+
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            });
+
+            const message = await response.text();
+            document.getElementById("loginMessage").innerText = message;
+        }
+
+        async function getSessionData() {
+            const response = await fetch('/login');
+            const data = await response.text();
+            document.getElementById("sessionData").innerText = data;
+        }
+
+        window.onload = () => {
+            loadTopPosts();
+            loadNotices();
+            setInterval(loadNotices, 10000); // 10초마다 loadNotices 호출
+        };
     </script>
 </head>
 <body>
-<h1>Like Post</h1>
+<h1>Like Post(Set)</h1>
 <input type="text" id="member" placeholder="Member name"><br>
 <input type="text" id="postId" placeholder="Post ID"><br>
 <button onclick="likePost()">Like</button>
@@ -70,7 +120,7 @@
 <p id="message"></p>
 <p id="likes"></p>
 
-<h1>Top 5 Liked Posts</h1>
+<h1>Top 5 Liked Posts(Sorted Set)</h1>
 <table id="topPostsTable" border="1">
     <thead>
     <tr>
@@ -81,5 +131,21 @@
     <tbody>
     </tbody>
 </table>
+
+<h1>Notices(Cash)</h1>
+<ul id="noticeList">
+</ul>
+
+<h1>Login(Session-store-set)</h1>
+<input type="text" id="username" placeholder="Username"><br>
+<input type="email" id="email" placeholder="Email"><br>
+<input type="password" id="password" placeholder="Password"><br>
+<button onclick="login()">Login</button>
+<p id="loginMessage"></p>
+
+<h1>Session Data(Session-store-get)</h1>
+<button onclick="getSessionData()">Get Session Data</button>
+<p id="sessionData"></p>
+
 </body>
 </html>

@@ -37,14 +37,6 @@ public class LeaderboardService {
         leaderboardRepository.save(entry);
     }
 
-//    @Cacheable(value = "leaderboard", key = "#key")
-//    public List<ResponseLeaderboardDto> getTopScores(String key, int top) {
-//        Set<ZSetOperations.TypedTuple<Object>> topScores = redisRepository.getTopScores(key, top);
-//        return topScores.stream()
-//                .map(ResponseLeaderboardDto::new)
-//                .collect(Collectors.toList());
-//    }
-
     @Cacheable(value = "leaderboard", key = "#key", unless = "#result == null || #result.isEmpty()")
     public List<ResponseLeaderboardDto> getTopScores(String key, int top) {
         Set<ZSetOperations.TypedTuple<Object>> topScores = redisRepository.getTopScores(key, top);

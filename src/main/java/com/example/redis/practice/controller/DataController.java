@@ -1,6 +1,8 @@
 package com.example.redis.practice.controller;
 
 import com.example.redis.practice.dto.RequestStringDto;
+import com.example.redis.practice.dto.ResponsePostsDto;
+import com.example.redis.practice.service.PostsService;
 import com.example.redis.practice.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import java.util.Set;
 public class DataController {
 
     private final RedisService redisService;
+    private final PostsService postsService;
 
     @PostMapping("/string")
     public String setString(@RequestBody RequestStringDto requestStringDto) {
@@ -72,5 +75,10 @@ public class DataController {
     @GetMapping("/zset")
     public Set<Object> getZSet(@RequestParam String key, @RequestParam double min, @RequestParam double max) {
         return redisService.getZSet(key, min, max);
+    }
+
+    @GetMapping("/notice")
+    public List<ResponsePostsDto> getNotice() {
+        return postsService.getNotice();
     }
 }
