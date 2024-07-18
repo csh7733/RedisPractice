@@ -14,7 +14,7 @@
 
             const message = await response.text();
             document.getElementById("message").innerText = message;
-            getLikes();
+            await getLikes();
         }
 
         async function unlikePost() {
@@ -27,7 +27,7 @@
 
             const message = await response.text();
             document.getElementById("message").innerText = message;
-            getLikes();
+            await getLikes();
         }
 
         async function getLikes() {
@@ -37,7 +37,7 @@
             const data = await response.json();
 
             document.getElementById("likes").innerText = `Likes: ${data.likeCount}, Members: ${data.members.join(', ')}`;
-            loadTopPosts();
+            await loadTopPosts();
         }
 
         async function loadTopPosts() {
@@ -66,7 +66,7 @@
                 noticeList.innerHTML = ''; // 기존 내용을 초기화
                 notices.forEach(notice => {
                     const listItem = document.createElement('li');
-                    listItem.textContent = `ID: ${notice.id}, Title: ${notice.title}`;
+                    listItem.textContent = `ID: ${notice.id}, ${notice.title}`;
                     noticeList.appendChild(listItem);
                 });
             } catch (error) {
@@ -95,6 +95,7 @@
 
             const message = await response.text();
             document.getElementById("loginMessage").innerText = message;
+            await getSessionData();
         }
 
         async function getSessionData() {
@@ -106,7 +107,8 @@
         window.onload = () => {
             loadTopPosts();
             loadNotices();
-            setInterval(loadNotices, 10000); // 10초마다 loadNotices 호출
+            getSessionData()
+            setInterval(loadNotices, 10000);
         };
     </script>
 </head>
@@ -144,7 +146,6 @@
 <p id="loginMessage"></p>
 
 <h1>Session Data(Session-store-get)</h1>
-<button onclick="getSessionData()">Get Session Data</button>
 <p id="sessionData"></p>
 
 </body>
