@@ -14,9 +14,16 @@ public class ResponsePostsDto {
 
     private Long id;
     private String title;
+    private String content;
+
+    public ResponsePostsDto(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 
     public ResponsePostsDto(Posts posts) {
         this.id = posts.getId();
         this.title = posts.getTitle();
+        this.content = posts.getContent();
     }
 }

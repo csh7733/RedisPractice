@@ -26,17 +26,37 @@ public class PostsService {
     private final PostsRepository postsRepository;
     private final CacheService cacheService;
 
-    public void save(String notice) {
-        Posts posts = new Posts(notice);
+    public void save(String notice,String content) {
+        Posts posts = new Posts(notice,content);
         postsRepository.save(posts);
     }
 
 
     @CachePut(value = "posts", key = "'notice'")
-    public List<ResponsePostsDto> saveNotice(Long id, String title) {
+    public List<ResponsePostsDto> saveNotice(String title,String content) {
         List<ResponsePostsDto> currentNotices = cacheService.getNoticesFromCache();
-        currentNotices.add(new ResponsePostsDto(id, title));
-        save(title);
+        currentNotices.add(new ResponsePostsDto(title,content));
+        save(title,content);
+        return currentNotices;
+    }
+
+    @CachePut(value = "posts", key = "'notice'")
+    public List<ResponsePostsDto> addNotice(Long id) {
+        String title = "Notice" + id;
+
+        List<ResponsePostsDto> currentNotices = cacheService.getNoticesFromCache();
+
+        boolean alreadyExists = currentNotices.stream()
+                .anyMatch(notice -> notice.getTitle().equals(title));
+
+        if (!alreadyExists) {
+            log.info("get from DB!");
+            Posts posts = postsRepository.findByTitle(title)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid ID: " + id));
+
+            currentNotices.add(new ResponsePostsDto(posts));
+        }
+
         return currentNotices;
     }
 

@@ -17,8 +17,12 @@ public class Posts{
     @Column(length = 500, nullable = false)
     private String title;
 
+    @Column(length = 500, nullable = false)
+    private String content;
+
     @Builder
-    public Posts(String title) {
+    public Posts(String title, String content) {
         this.title = title;
+        this.content = content;
     }
 }

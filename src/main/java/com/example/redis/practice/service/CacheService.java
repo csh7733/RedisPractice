@@ -12,7 +12,6 @@ public class CacheService {
 
     @Cacheable(value = "posts", key = "'notice'", unless = "#result == null || #result.isEmpty()")
     public List<ResponsePostsDto> getNoticesFromCache() {
-
         return new ArrayList<>();
     }
 }

@@ -81,4 +81,9 @@ public class DataController {
     public List<ResponsePostsDto> getNotice() {
         return postsService.getNotice();
     }
+
+    @GetMapping("/notice/{id}")
+    public List<ResponsePostsDto> getNoticeById(@PathVariable Long id) {
+        return postsService.addNotice(id);
+    }
 }

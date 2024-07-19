@@ -66,11 +66,32 @@
                 noticeList.innerHTML = ''; // 기존 내용을 초기화
                 notices.forEach(notice => {
                     const listItem = document.createElement('li');
-                    listItem.textContent = `ID: ${notice.id}, ${notice.title}`;
+                    listItem.textContent = `${notice.title} : ${notice.content}`;
                     noticeList.appendChild(listItem);
                 });
             } catch (error) {
                 console.error('Error loading notices:', error);
+            }
+        }
+
+        async function addNoticeById() {
+            const id = document.getElementById("noticeId").value;
+
+            const response = await fetch(`/api/notice/${id}`, {
+                method: 'GET'
+            });
+
+            if (response.ok) {
+                const updatedNotices = await response.json();
+                const noticeList = document.getElementById('noticeList');
+                noticeList.innerHTML = ''; // 기존 내용을 초기화
+                updatedNotices.forEach(notice => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${notice.title} : ${notice.content}`;
+                    noticeList.appendChild(listItem);
+                });
+            } else {
+                console.error('Error adding notice:', await response.text());
             }
         }
 
@@ -134,9 +155,11 @@
     </tbody>
 </table>
 
-<h1>Notices(Cash)</h1>
+<h1>Notices(Cash) - Write Through</h1>
 <ul id="noticeList">
 </ul>
+<input type="text" id="noticeId" placeholder="Notice ID"><br>
+<button onclick="addNoticeById()">Search Notice by ID</button>
 
 <h1>Login(Session-store-set)</h1>
 <input type="text" id="username" placeholder="Username"><br>
