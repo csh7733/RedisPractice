@@ -30,7 +30,9 @@ public class DataScheduler {
 
     @Scheduled(fixedRate = 10000)
     public void generateNotice() {
-        String notice = "Notice :" + (random.nextInt(100) + 1);
-        postsService.save(notice);
+        Long randomInt = random.nextLong(100) + 1;
+        String notice = "Notice :" + (randomInt);
+        //postsService.save(notice);
+        postsService.saveNotice(randomInt,notice);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.data.redis.core.ZSetOperations;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class ResponsePostsDto {
 
     private Long id;
