@@ -5,12 +5,11 @@
 
 # 캐시 (https://csh7733.tistory.com/6)
 
-### 읽기 전략 : Look-Aside, 쓰기 전략 : Write-Through 캐쉬 구현하기
+### 읽기 전략 : Look-Aside, 쓰기 전략 : Write-Through 캐시 구현하기
 - 캐시는 DB의 SubSet이다
 ![image](https://github.com/user-attachments/assets/be88274b-9153-4ab7-9f1c-37be049c61a4)
 
-
-### 쓰기 전략 : 메시지큐로 Write-Back 캐쉬 구현하기
+### 쓰기 전략 : 메시지큐로 Write-Back 캐시 구현하기
 - 상황에 따라 DB는 캐시의 SubSet일 수 있다.
 ![image](https://github.com/user-attachments/assets/01a84d07-91c9-4c1e-b394-45f58ce7c3a4)
 
