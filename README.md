@@ -1,7 +1,6 @@
 # 자료구조 (https://csh7733.tistory.com/5)
 
 ### Set을 이용하여 좋아요 구현, Sorted Set을 이용하여 게시물 중 좋아요 수가 많은 상위 게시물 리더보드 구현
-- https://csh7733.tistory.com/5
 ![image](https://github.com/user-attachments/assets/8678d369-2307-4bea-a6ee-9b5ef7f1ebfd)
 
 # 캐시 (https://csh7733.tistory.com/6)
