@@ -173,6 +173,27 @@
             document.getElementById("sessionData").innerText = data;
         }
 
+        // 추가된 함수: 작업 추가
+        async function addTask() {
+            const task = document.getElementById("task").value;
+
+            const response = await fetch(`/tasks/add?task=${task}`, {
+                method: 'POST'
+            });
+
+            const message = await response.text();
+            document.getElementById("taskMessage").innerText = message;
+            checkAllThreadStatuses();
+        }
+
+
+        async function checkAllThreadStatuses() {
+            const response = await fetch(`/tasks/status`);
+            const statuses = await response.json();
+
+            document.getElementById("threadStatusThread-0").innerText = statuses["Thread-0"];
+            document.getElementById("threadStatusThread-1").innerText = statuses["Thread-1"];
+        }
         window.onload = () => {
             loadTopPosts();
             loadNotices();
@@ -180,6 +201,7 @@
             getSessionData();
             setInterval(loadNotices, 10000);
             setInterval(loadCommentsFromCache, 5000); // 5초마다 캐시에서 댓글 가져오기
+            checkTaskStatus()
         };
     </script>
 </head>
@@ -234,6 +256,18 @@
 
 <h1>Session Data(Session-store-get)</h1>
 <p id="sessionData"></p>
+
+<h1>Add Task(Message Queue-Blocking)</h1>
+<input type="text" id="task" placeholder="Task"><br>
+<button onclick="addTask()">Add Task</button>
+<p id="taskMessage"></p>
+
+<h1>Thread Status</h1>
+<button onclick="checkAllThreadStatuses()">Check All Thread Statuses</button>
+<p id="threadStatusThread-0"></p>
+<p id="threadStatusThread-1"></p>
+</body>
+</html>
 
 </body>
 </html>
