@@ -1,5 +1,6 @@
 package com.example.redis.practice;
 
+import com.example.redis.practice.service.CommentService;
 import com.example.redis.practice.service.LeaderboardService;
 import com.example.redis.practice.service.PostsService;
 import com.example.redis.practice.service.RedisService;
@@ -19,6 +20,7 @@ public class DataScheduler {
 
     private final LeaderboardService leaderboardService;
     private final PostsService postsService;
+    private final CommentService commentService;
     private static final Random random = new Random();
 
     @Scheduled(fixedRate = 5000)
@@ -35,5 +37,13 @@ public class DataScheduler {
         String content = "Content" + (randomInt);
         //postsService.save(notice);
         postsService.saveNotice(notice,content);
+    }
+
+    @Scheduled(fixedRate = 10000)
+    public void generateComment() {
+        Long randomInt = random.nextLong(100) + 1;
+        String author = "Author" + (randomInt);
+        String content = "Content" + (randomInt);
+        commentService.saveComment(author,content);
     }
 }

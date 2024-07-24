@@ -82,6 +82,15 @@ public class PostsService {
 
     }
 
+    public List<ResponsePostsDto> getNoticeFromDB() {
+
+        return postsRepository.findAll().stream()
+                .map(ResponsePostsDto::new)
+                .collect(Collectors.toList());
+
+    }
+
+
 //    public List<ResponsePostsDto> getNotice() {
 //        return new ArrayList<>();
 //    }

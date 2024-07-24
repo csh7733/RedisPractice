@@ -1,7 +1,9 @@
 package com.example.redis.practice.controller;
 
 import com.example.redis.practice.dto.RequestStringDto;
+import com.example.redis.practice.dto.ResponseCommentDto;
 import com.example.redis.practice.dto.ResponsePostsDto;
+import com.example.redis.practice.service.CommentService;
 import com.example.redis.practice.service.PostsService;
 import com.example.redis.practice.service.RedisService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ public class DataController {
 
     private final RedisService redisService;
     private final PostsService postsService;
+    private final CommentService commentService;
 
     @PostMapping("/string")
     public String setString(@RequestBody RequestStringDto requestStringDto) {
@@ -85,5 +88,20 @@ public class DataController {
     @GetMapping("/notice/{id}")
     public List<ResponsePostsDto> getNoticeById(@PathVariable Long id) {
         return postsService.addNotice(id);
+    }
+
+    @GetMapping("/notice/all")
+    public List<ResponsePostsDto> getNoticeFromDB() {
+        return postsService.getNoticeFromDB();
+    }
+
+    @GetMapping("/comment")
+    public List<ResponseCommentDto> getCommnetFromCache() {
+        return commentService.getCommentsFromCache();
+    }
+
+    @GetMapping("/comment/all")
+    public List<ResponseCommentDto> getCommnetFromDB() {
+        return commentService.getCommentsFromDB();
     }
 }

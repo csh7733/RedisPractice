@@ -74,6 +74,22 @@
             }
         }
 
+        async function loadNoticesFromDB() {
+            try {
+                const response = await fetch('/api/notice/all');
+                const notices = await response.json();
+                const noticeListDB = document.getElementById('noticeListDB');
+                noticeListDB.innerHTML = ''; // 기존 내용을 초기화
+                notices.forEach(notice => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${notice.title} : ${notice.content}`;
+                    noticeListDB.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Error loading notices from DB:', error);
+            }
+        }
+
         async function addNoticeById() {
             const id = document.getElementById("noticeId").value;
 
@@ -92,6 +108,38 @@
                 });
             } else {
                 console.error('Error adding notice:', await response.text());
+            }
+        }
+
+        async function loadCommentsFromCache() {
+            try {
+                const response = await fetch('/api/comment');
+                const comments = await response.json();
+                const commentListCache = document.getElementById('commentListCache');
+                commentListCache.innerHTML = ''; // 기존 내용을 초기화
+                comments.forEach(comment => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${comment.author} : ${comment.content}`;
+                    commentListCache.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Error loading comments from cache:', error);
+            }
+        }
+
+        async function loadCommentsFromDB() {
+            try {
+                const response = await fetch('/api/comment/all');
+                const comments = await response.json();
+                const commentListDB = document.getElementById('commentListDB');
+                commentListDB.innerHTML = ''; // 기존 내용을 초기화
+                comments.forEach(comment => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${comment.author} : ${comment.content}`;
+                    commentListDB.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Error loading comments from DB:', error);
             }
         }
 
@@ -128,8 +176,10 @@
         window.onload = () => {
             loadTopPosts();
             loadNotices();
-            getSessionData()
+            loadCommentsFromCache();
+            getSessionData();
             setInterval(loadNotices, 10000);
+            setInterval(loadCommentsFromCache, 5000); // 5초마다 캐시에서 댓글 가져오기
         };
     </script>
 </head>
@@ -155,11 +205,25 @@
     </tbody>
 </table>
 
-<h1>Notices(Cash) - Write Through</h1>
+<h1>Notices(Cash) - Look aside + Write Through</h1>
 <ul id="noticeList">
 </ul>
 <input type="text" id="noticeId" placeholder="Notice ID"><br>
-<button onclick="addNoticeById()">Search Notice by ID</button>
+<button onclick="addNoticeById()">Search Notice by ID In Cache</button>
+
+<h1>Notices(DB)</h1>
+<ul id="noticeListDB">
+</ul>
+<button onclick="loadNoticesFromDB()">Load Notices from DB</button>
+
+<h1>Comments(Cash) - Write Back</h1>
+<ul id="commentListCache">
+</ul>
+
+<h1>Comments(DB)</h1>
+<ul id="commentListDB">
+</ul>
+<button onclick="loadCommentsFromDB()">Load Comments from DB</button>
 
 <h1>Login(Session-store-set)</h1>
 <input type="text" id="username" placeholder="Username"><br>
