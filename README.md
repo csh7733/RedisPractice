@@ -11,7 +11,7 @@
 
 
 ### 쓰기 전략 : 메시지큐로 Write-Back 캐쉬 구현하기
-- 상황에 따라 DB는 캐시에 SubSet일 수 있다.
+- 상황에 따라 DB는 캐시의 SubSet일 수 있다.
 ![image](https://github.com/user-attachments/assets/01a84d07-91c9-4c1e-b394-45f58ce7c3a4)
 
 ### 세션 스토어 : 분산 서버에서 상태정보가 종속되지 않기 위해
